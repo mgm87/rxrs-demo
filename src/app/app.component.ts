@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { WindowSizeService } from './services/window-size.service';
+import { WindowSizeService, FullScreenWidths, FullScreenWidthEnum } from './services/window-size.service';
+import { Observable } from 'rxjs';
+import { AppStateService } from './services/app-state.service';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +11,24 @@ import { WindowSizeService } from './services/window-size.service';
 })
 export class AppComponent implements OnInit {
   title = 'rxrs-demo';
-
-  constructor(private windowSizeService: WindowSizeService) {}
+  currentSize$: Observable<FullScreenWidthEnum>;
+  sideNavOpen$: Observable<boolean>;
+  sizes: FullScreenWidths;
+  splitObj;
+  constructor(private windowSizeService: WindowSizeService, private state: AppStateService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.windowSizeService.sizes.subscribe((size) => {
-      console.log(size);
+    this.sideNavOpen$ = this.state.sidenavOpen$;
+
+    this.windowSizeService.sizes$.subscribe((size) => {
+      if (size.xSmall) {
+        this.state.closeSidenav();
+      }
+
+      this.sizes = size;
     });
+
+    this.currentSize$ = this.windowSizeService.currentSize$;
+
   }
 }

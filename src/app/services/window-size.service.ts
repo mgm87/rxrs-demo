@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, NgZone } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RxRs } from 'rxrs';
 
@@ -70,14 +70,22 @@ export class WindowSizeService {
  /**
   * The observable of screen sizes
   */
- sizes: Observable<FullScreenWidths>;
+ sizes$: Observable<FullScreenWidths>;
+
+ /**
+  * The observable of screen sizes
+  */
+ currentSize$: Observable<FullScreenWidthEnum>;
 
  private screenSizeSubject: BehaviorSubject<FullScreenWidths>;
+ private currentSizeSubject: Subject<FullScreenWidthEnum>;
  private rxrs: RxRs;
 
- constructor() {
+ constructor(private zone: NgZone) {
    this.screenSizeSubject = new BehaviorSubject(initialScreenSizes);
-   this.sizes = this.screenSizeSubject.asObservable();
+   this.currentSizeSubject = new BehaviorSubject(FullScreenWidthEnum.medium);
+   this.sizes$ = this.screenSizeSubject.asObservable();
+   this.currentSize$ = this.currentSizeSubject.asObservable();
 
    // Determines what sizes constitute a mobile screen
    this.isMobileState = this.screenSizeSubject.pipe(
@@ -101,6 +109,9 @@ export class WindowSizeService {
          ...initialScreenSizes,
          xSmall: matches
        });
+       this.zone.run(() => {
+        this.currentSizeSubject.next(FullScreenWidthEnum.xSmall);
+       });
      }
    });
    this.rxrs.observe(`(min-width: ${screenSizes.small}px) and (max-width: ${screenSizes.medium - 1}px)`).subscribe((matches) => {
@@ -108,6 +119,9 @@ export class WindowSizeService {
        this.screenSizeSubject.next({
          ...initialScreenSizes,
          small: matches
+       });
+       this.zone.run(() => {
+         this.currentSizeSubject.next(FullScreenWidthEnum.small);
        });
      }
    });
@@ -117,6 +131,9 @@ export class WindowSizeService {
          ...initialScreenSizes,
          medium: matches
        });
+       this.zone.run(() => {
+         this.currentSizeSubject.next(FullScreenWidthEnum.medium);
+       });
      }
    });
    this.rxrs.observe(`(min-width: ${screenSizes.large}px) and (max-width: ${screenSizes.xLarge - 1}px)`).subscribe((matches) => {
@@ -125,6 +142,9 @@ export class WindowSizeService {
          ...initialScreenSizes,
          large: matches
        });
+       this.zone.run(() => {
+         this.currentSizeSubject.next(FullScreenWidthEnum.large);
+       });
      }
    });
    this.rxrs.observe(`(min-width: ${screenSizes.xLarge}px)`).subscribe((matches) => {
@@ -132,6 +152,9 @@ export class WindowSizeService {
        this.screenSizeSubject.next({
          ...initialScreenSizes,
          xLarge: matches
+       });
+       this.zone.run(() => {
+         this.currentSizeSubject.next(FullScreenWidthEnum.xLarge);
        });
      }
    });

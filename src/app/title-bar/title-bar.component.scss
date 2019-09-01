@@ -1,0 +1,67 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 8px 0;
+}
+
+p {
+  margin: 0;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.spacer-xSmall {
+  flex: 0;
+}
+
+.toolbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+  justify-content: space-between;
+}
+
+.toolbar img {
+  margin: 0 16px;
+}
+
+.toolbar #twitter-logo {
+  height: 40px;
+  margin: 0 16px;
+}
+
+.toolbar #twitter-logo:hover {
+  opacity: 0.8;
+}
+
+.title {
+  color: ivory;
+}
+
+.title-xSmall {
+  font-size: 1.5em;
+}
+
+.title-small {
+  font-size: 2em;
+}
+
+.title-medium {
+  font-size: 1.5em;
+}
+
+.title-large {
+  font-size: 1em;
+}
+
+.title-xLarge {
+  font-size: 2em;
+}
