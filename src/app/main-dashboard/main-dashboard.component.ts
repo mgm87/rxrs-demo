@@ -19,8 +19,13 @@ export class MainDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.filterPanelOpen$ = this.state.filterPanelOpen$;
-    this.viewState = combineLatest(this.windowSizeService.sizes$, this.state.sidenavOpen$, this.state.filterPanelOpen$).pipe(
-      map(([sizes, sidenavOpen, filtersOpen]) => {
+    this.viewState = combineLatest(
+      this.windowSizeService.sizes$,
+      this.windowSizeService.isMobileState,
+      this.state.sidenavOpen$,
+      this.state.filterPanelOpen$
+    ).pipe(
+      map(([sizes, isMobile, sidenavOpen, filtersOpen]) => {
         let viewToReturn: MainDashboardViewState;
         if (sizes.xSmall || sizes.small && sidenavOpen) {
           viewToReturn = {
@@ -30,7 +35,8 @@ export class MainDashboardComponent implements OnInit {
               { title: 'Card 3', cols: 2, rows: 1 },
               { title: 'Card 4', cols: 2, rows: 1 }
             ],
-            filterClass: FullScreenWidthEnum.xSmall
+            filterClass: FullScreenWidthEnum.xSmall,
+            isMobile
           };
         } else if (sizes.small && !sidenavOpen && filtersOpen) {
           viewToReturn = {
@@ -40,7 +46,19 @@ export class MainDashboardComponent implements OnInit {
               { title: 'Card 3', cols: 2, rows: 1 },
               { title: 'Card 4', cols: 2, rows: 1 }
             ],
-            filterClass: FullScreenWidthEnum.medium
+            filterClass: FullScreenWidthEnum.medium,
+            isMobile
+          };
+        } else if (sizes.medium && sidenavOpen && filtersOpen) {
+          viewToReturn = {
+            cards: [
+              { title: 'Card 1', cols: 2, rows: 1 },
+              { title: 'Card 2', cols: 2, rows: 1 },
+              { title: 'Card 3', cols: 2, rows: 1 },
+              { title: 'Card 4', cols: 2, rows: 1 }
+            ],
+            filterClass: FullScreenWidthEnum.medium,
+            isMobile
           };
         } else {
           viewToReturn = {
@@ -50,7 +68,8 @@ export class MainDashboardComponent implements OnInit {
               { title: 'Card 3', cols: 1, rows: 2 },
               { title: 'Card 4', cols: 1, rows: 1 }
             ],
-            filterClass: FullScreenWidthEnum.medium
+            filterClass: FullScreenWidthEnum.medium,
+            isMobile
           };
         }
 
@@ -71,6 +90,7 @@ export class MainDashboardComponent implements OnInit {
 interface MainDashboardViewState {
   cards: Card[];
   filterClass: FullScreenWidthEnum;
+  isMobile: boolean;
 }
 
 interface Card {

@@ -2,6 +2,10 @@
   <h1 class="mat-h1">Dashboard</h1>
   <button *ngIf="!(filterPanelOpen$ | async)" mat-raised-button color="primary" aria-label="Open Filters" (click)="openFilters()">Open Filters</button>
   <button *ngIf="filterPanelOpen$ | async" mat-raised-button color="primary" aria-label="Close Filters" (click)="closeFilters()">Close Filters</button>
+
+  <!-- Don't generate this component if in mobile -->
+  <app-big-one *ngIf="!(viewState | async).isMobile"></app-big-one>
+
   <mat-grid-list cols="2" rowHeight="350px">
     <mat-grid-tile *ngFor="let card of (viewState | async).cards" [colspan]="card.cols" [rowspan]="card.rows">
       <mat-card class="dashboard-card">

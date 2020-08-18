@@ -12,12 +12,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
+import { BigOneComponent } from './big-one/big-one.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TitleBarComponent,
-    MainDashboardComponent
+    MainDashboardComponent,
+    BigOneComponent
   ],
   imports: [
     BrowserModule,

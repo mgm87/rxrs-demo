@@ -1,0 +1,10 @@
+.wrapper {
+  width: calc(100% - 2em);
+  border: 2px solid lightgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25em;
+  padding: 1em;
+  margin-top: 1em;
+}
